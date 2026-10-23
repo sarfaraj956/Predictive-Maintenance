@@ -25,7 +25,7 @@ export interface PredictionResults {
 
 export interface PredictionResponse {
   model_choice: ModelChoice;
-  calculated_features: CalculatedFeatures;
+  calculated_features?: CalculatedFeatures;
   predictions: PredictionResults;
 }
 

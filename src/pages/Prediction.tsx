@@ -651,9 +651,11 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                 </div>
 
                 <div className="text-xs font-mono text-slate-600 dark:text-slate-300 sm:text-right">
-                  <span className="block font-semibold">Engineered Power</span>
-                  <span className="text-base font-extrabold text-slate-900 dark:text-white">
-                    {formatPower(result.calculated_features?.power ?? 0)}
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
+                    Model Evaluation
+                  </span>
+                  <span className="text-sm font-bold text-slate-900 dark:text-white capitalize">
+                    {result.model_choice ? result.model_choice.replace('_', ' ') : 'Both Models'}
                   </span>
                 </div>
               </div>
@@ -698,35 +700,6 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
                     Gradient tree boosting with robust thermal feature scaling.
                   </p>
-                </div>
-              </div>
-
-              {/* Backend Calculated Features (FastAPI output) */}
-              <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 font-mono block">
-                  Backend-Engineered Features
-                </span>
-                <div className="grid grid-cols-3 gap-3 text-center font-mono">
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Temperature Diff</span>
-                    <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                      {result.calculated_features?.temp_diff ?? 0} K
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Wear-Torque Index</span>
-                    <span className="text-sm font-bold text-slate-900 dark:text-white">
-                      {result.calculated_features?.wear_torque ?? 0}
-                    </span>
-                  </div>
-
-                  <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
-                    <span className="text-[10px] text-slate-400 block">Mechanical Power</span>
-                    <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400">
-                      {result.calculated_features?.power ?? 0} W
-                    </span>
-                  </div>
                 </div>
               </div>
             </div>

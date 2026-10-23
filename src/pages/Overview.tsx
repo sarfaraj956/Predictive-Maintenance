@@ -349,22 +349,22 @@ export const Overview: React.FC<OverviewProps> = ({
                   </div>
                 </div>
 
-                {/* Key Engineered Parameters */}
+                {/* Key Operating Parameters */}
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800 text-xs font-mono space-y-2">
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Machine Variant</span>
                     <strong className="text-slate-900 dark:text-white">Type {latestRecord.inputs?.Type ?? 'M'}</strong>
                   </div>
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                    <span>Mechanical Power</span>
+                    <span>Rotational Speed</span>
                     <strong className="text-cyan-600 dark:text-cyan-400">
-                      {formatPower(latestRecord.result.calculated_features?.power ?? 0)}
+                      {latestRecord.inputs?.['Rotational speed [rpm]'] ?? 0} RPM
                     </strong>
                   </div>
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                    <span>Wear-Torque Index</span>
+                    <span>Applied Torque</span>
                     <strong className="text-slate-900 dark:text-white">
-                      {formatNumber(latestRecord.result.calculated_features?.wear_torque ?? 0)}
+                      {latestRecord.inputs?.['Torque [Nm]'] ?? 0} Nm
                     </strong>
                   </div>
                 </div>

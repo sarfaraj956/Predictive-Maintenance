@@ -75,15 +75,15 @@ export const Comparison: React.FC<ComparisonProps> = ({ history }) => {
   ];
 
   // Session stats
-  const bothRecords = history.filter((h) => h.result.model_choice === 'both');
+  const bothRecords = history.filter((h) => h.result?.model_choice === 'both');
   const agreedBothNormal = bothRecords.filter(
-    (h) => h.result.predictions.random_forest === 0 && h.result.predictions.xgboost === 0
+    (h) => h.result?.predictions?.random_forest === 0 && h.result?.predictions?.xgboost === 0
   ).length;
   const agreedBothFailure = bothRecords.filter(
-    (h) => h.result.predictions.random_forest === 1 && h.result.predictions.xgboost === 1
+    (h) => h.result?.predictions?.random_forest === 1 && h.result?.predictions?.xgboost === 1
   ).length;
   const disagreed = bothRecords.filter(
-    (h) => h.result.predictions.random_forest !== h.result.predictions.xgboost
+    (h) => h.result?.predictions?.random_forest !== h.result?.predictions?.xgboost
   ).length;
 
   return (

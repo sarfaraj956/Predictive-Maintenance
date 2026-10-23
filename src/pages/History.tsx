@@ -221,7 +221,7 @@ export const History: React.FC<HistoryProps> = ({
               <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
                 {filteredHistory.map((rec) => {
                   const isFail =
-                    rec.result.predictions.random_forest === 1 || rec.result.predictions.xgboost === 1;
+                    rec.result?.predictions?.random_forest === 1 || rec.result?.predictions?.xgboost === 1;
                   return (
                     <tr
                       key={rec.id}
@@ -239,7 +239,7 @@ export const History: React.FC<HistoryProps> = ({
 
                       <td className="py-3 px-4">
                         <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200">
-                          Type {rec.inputs.Type}
+                          Type {rec.inputs?.Type ?? 'M'}
                         </span>
                       </td>
 
@@ -340,8 +340,8 @@ export const History: React.FC<HistoryProps> = ({
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Outcome</span>
                 <StatusBadge
                   status={
-                    selectedRecord.result.predictions.random_forest === 1 ||
-                    selectedRecord.result.predictions.xgboost === 1
+                    selectedRecord.result?.predictions?.random_forest === 1 ||
+                    selectedRecord.result?.predictions?.xgboost === 1
                       ? 1
                       : 0
                   }
@@ -359,25 +359,25 @@ export const History: React.FC<HistoryProps> = ({
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 block">Rotational Speed</span>
                 <strong className="text-cyan-600 dark:text-cyan-400">
-                  {selectedRecord.inputs['Rotational speed [rpm]']} RPM
+                  {selectedRecord.inputs?.['Rotational speed [rpm]'] ?? 0} RPM
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 block">Cutting Torque</span>
                 <strong className="text-amber-600 dark:text-amber-400">
-                  {selectedRecord.inputs['Torque [Nm]']} Nm
+                  {selectedRecord.inputs?.['Torque [Nm]'] ?? 0} Nm
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 block">Process / Air Temp</span>
                 <strong className="text-indigo-600 dark:text-indigo-400">
-                  {selectedRecord.inputs['Process temperature [K]']} / {selectedRecord.inputs['Air temperature [K]']} K
+                  {selectedRecord.inputs?.['Process temperature [K]'] ?? 0} / {selectedRecord.inputs?.['Air temperature [K]'] ?? 0} K
                 </strong>
               </div>
               <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 block">Tool Wear</span>
                 <strong className="text-rose-600 dark:text-rose-400">
-                  {selectedRecord.inputs['Tool wear [min]']} min
+                  {selectedRecord.inputs?.['Tool wear [min]'] ?? 0} min
                 </strong>
               </div>
             </div>

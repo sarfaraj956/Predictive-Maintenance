@@ -9,7 +9,22 @@ export function getPredictionHistory(): HistoryRecord[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed)) {
-      return parsed;
+      return parsed
+        .filter((r) => r && typeof r === 'object' && r.inputs)
+        .map((r) => ({
+          ...r,
+          inputs: r.inputs || {},
+          result: {
+            model_choice: r.result?.model_choice || 'both',
+            predictions: r.result?.predictions || {},
+            calculated_features: {
+              temp_diff: r.result?.calculated_features?.temp_diff ?? 0,
+              wear_torque: r.result?.calculated_features?.wear_torque ?? 0,
+              power: r.result?.calculated_features?.power ?? 0,
+            },
+          },
+          latencyMs: typeof r.latencyMs === 'number' ? r.latencyMs : 0,
+        }));
     }
   } catch (e) {
     console.error('Failed to parse prediction history from localStorage', e);

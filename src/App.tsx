@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Sidebar, NavTab } from './components/layout/Sidebar';
 import { Navbar } from './components/layout/Navbar';
 import { Overview } from './pages/Overview';
@@ -63,14 +64,15 @@ export function DashboardApp() {
 
   // Handler when user clicks "Reload" on a past record
   const handleSelectRecordForInspection = (record: HistoryRecord) => {
+    if (!record || !record.inputs) return;
     setLoadedInspectionValues({
-      modelChoice: record.result.model_choice,
-      machineType: record.inputs.Type,
-      rotationalSpeed: record.inputs['Rotational speed [rpm]'],
-      airTemperature: record.inputs['Air temperature [K]'],
-      processTemperature: record.inputs['Process temperature [K]'],
-      torque: record.inputs['Torque [Nm]'],
-      toolWear: record.inputs['Tool wear [min]'],
+      modelChoice: record.result?.model_choice ?? 'both',
+      machineType: record.inputs.Type ?? 'M',
+      rotationalSpeed: record.inputs['Rotational speed [rpm]'] ?? 1550,
+      airTemperature: record.inputs['Air temperature [K]'] ?? 298.1,
+      processTemperature: record.inputs['Process temperature [K]'] ?? 308.6,
+      torque: record.inputs['Torque [Nm]'] ?? 42.8,
+      toolWear: record.inputs['Tool wear [min]'] ?? 15,
     });
     setCurrentTab('prediction');
   };
@@ -159,9 +161,11 @@ export function DashboardApp() {
 
 export function App() {
   return (
-    <ThemeProvider>
-      <DashboardApp />
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
+        <DashboardApp />
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 

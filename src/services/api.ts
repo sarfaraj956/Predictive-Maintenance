@@ -6,9 +6,11 @@ import {
 } from '../types';
 
 const STORAGE_KEY_API_URL = 'maintena_api_base_url';
-// Default to '/api' which leverages the Vite dev proxy to http://127.0.0.1:8000
-// This completely avoids browser CORS restrictions during development and evaluation.
-const DEFAULT_API_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Use environment variable, or default to Render backend in production, /api proxy in development
+const RENDER_BACKEND_URL = 'https://predictive-maintenance-zw5k.onrender.com';
+const DEFAULT_API_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.PROD ? RENDER_BACKEND_URL : '/api');
 
 export function getApiBaseUrl(): string {
   try {

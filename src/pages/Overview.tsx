@@ -64,14 +64,14 @@ export const Overview: React.FC<OverviewProps> = ({
   // KPIs
   const totalPredictions = history.length;
   const failureCount = history.filter(
-    (h) => h.result.predictions.random_forest === 1 || h.result.predictions.xgboost === 1
+    (h) => h.result?.predictions?.random_forest === 1 || h.result?.predictions?.xgboost === 1
   ).length;
   const healthyCount = totalPredictions - failureCount;
   const healthRate = totalPredictions > 0 ? ((healthyCount / totalPredictions) * 100).toFixed(1) : null;
 
-  const bothEvaluations = history.filter((h) => h.result.model_choice === 'both');
+  const bothEvaluations = history.filter((h) => h.result?.model_choice === 'both');
   const agreementCount = bothEvaluations.filter(
-    (h) => h.result.predictions.random_forest === h.result.predictions.xgboost
+    (h) => h.result?.predictions?.random_forest === h.result?.predictions?.xgboost
   ).length;
   const agreementRate =
     bothEvaluations.length > 0 ? ((agreementCount / bothEvaluations.length) * 100).toFixed(1) : null;
@@ -79,13 +79,13 @@ export const Overview: React.FC<OverviewProps> = ({
   const latestRecord = history.length > 0 ? history[0] : null;
 
   // Active values for preview
-  const currentSpeed = isSimulating ? simSpeed : (latestRecord ? latestRecord.inputs['Rotational speed [rpm]'] : 1550);
-  const currentTorque = isSimulating ? simTorque : (latestRecord ? latestRecord.inputs['Torque [Nm]'] : 42.8);
-  const currentAirTemp = isSimulating ? simAirTemp : (latestRecord ? latestRecord.inputs['Air temperature [K]'] : 298.1);
-  const currentProcTemp = isSimulating ? simProcessTemp : (latestRecord ? latestRecord.inputs['Process temperature [K]'] : 308.6);
-  const currentToolWear = isSimulating ? simToolWear : (latestRecord ? latestRecord.inputs['Tool wear [min]'] : 15);
+  const currentSpeed = isSimulating ? simSpeed : (latestRecord?.inputs ? latestRecord.inputs['Rotational speed [rpm]'] : 1550);
+  const currentTorque = isSimulating ? simTorque : (latestRecord?.inputs ? latestRecord.inputs['Torque [Nm]'] : 42.8);
+  const currentAirTemp = isSimulating ? simAirTemp : (latestRecord?.inputs ? latestRecord.inputs['Air temperature [K]'] : 298.1);
+  const currentProcTemp = isSimulating ? simProcessTemp : (latestRecord?.inputs ? latestRecord.inputs['Process temperature [K]'] : 308.6);
+  const currentToolWear = isSimulating ? simToolWear : (latestRecord?.inputs ? latestRecord.inputs['Tool wear [min]'] : 15);
   const currentFailure = latestRecord
-    ? latestRecord.result.predictions.random_forest === 1 || latestRecord.result.predictions.xgboost === 1
+    ? latestRecord.result?.predictions?.random_forest === 1 || latestRecord.result?.predictions?.xgboost === 1
     : false;
 
   const deltaT = Number((currentProcTemp - currentAirTemp).toFixed(1));
@@ -330,7 +330,7 @@ export const Overview: React.FC<OverviewProps> = ({
                     </span>
                     <div className="mt-1 flex items-center gap-1.5">
                       <StatusBadge
-                        status={latestRecord.result.predictions.random_forest ?? 'unknown'}
+                        status={latestRecord.result?.predictions?.random_forest ?? 'unknown'}
                         size="sm"
                       />
                     </div>
@@ -342,7 +342,7 @@ export const Overview: React.FC<OverviewProps> = ({
                     </span>
                     <div className="mt-1 flex items-center gap-1.5">
                       <StatusBadge
-                        status={latestRecord.result.predictions.xgboost ?? 'unknown'}
+                        status={latestRecord.result?.predictions?.xgboost ?? 'unknown'}
                         size="sm"
                       />
                     </div>
@@ -353,7 +353,7 @@ export const Overview: React.FC<OverviewProps> = ({
                 <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800 text-xs font-mono space-y-2">
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Machine Variant</span>
-                    <strong className="text-slate-900 dark:text-white">Type {latestRecord.inputs.Type}</strong>
+                    <strong className="text-slate-900 dark:text-white">Type {latestRecord.inputs?.Type ?? 'M'}</strong>
                   </div>
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Mechanical Power</span>

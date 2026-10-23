@@ -259,7 +259,7 @@ export const Prediction: React.FC<PredictionPageProps> = ({
 
   // Determine current failure state for 3D viewer
   const isFailureOutcome = result
-    ? (result.predictions.random_forest === 1 || result.predictions.xgboost === 1)
+    ? (result.predictions?.random_forest === 1 || result.predictions?.xgboost === 1)
     : failureModeAnalysis.hasActiveRisk;
 
 
@@ -653,7 +653,7 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                 <div className="text-xs font-mono text-slate-600 dark:text-slate-300 sm:text-right">
                   <span className="block font-semibold">Engineered Power</span>
                   <span className="text-base font-extrabold text-slate-900 dark:text-white">
-                    {formatPower(result.calculated_features.power)}
+                    {formatPower(result.calculated_features?.power ?? 0)}
                   </span>
                 </div>
               </div>
@@ -671,7 +671,7 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                   </div>
                   <div className="pt-1">
                     <StatusBadge
-                      status={result.predictions.random_forest ?? 'unknown'}
+                      status={result.predictions?.random_forest ?? 'unknown'}
                       size="md"
                     />
                   </div>
@@ -691,7 +691,7 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                   </div>
                   <div className="pt-1">
                     <StatusBadge
-                      status={result.predictions.xgboost ?? 'unknown'}
+                      status={result.predictions?.xgboost ?? 'unknown'}
                       size="md"
                     />
                   </div>
@@ -710,21 +710,21 @@ export const Prediction: React.FC<PredictionPageProps> = ({
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                     <span className="text-[10px] text-slate-400 block">Temperature Diff</span>
                     <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
-                      {result.calculated_features.temp_diff} K
+                      {result.calculated_features?.temp_diff ?? 0} K
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                     <span className="text-[10px] text-slate-400 block">Wear-Torque Index</span>
                     <span className="text-sm font-bold text-slate-900 dark:text-white">
-                      {result.calculated_features.wear_torque}
+                      {result.calculated_features?.wear_torque ?? 0}
                     </span>
                   </div>
 
                   <div className="p-3 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800">
                     <span className="text-[10px] text-slate-400 block">Mechanical Power</span>
                     <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400">
-                      {result.calculated_features.power} W
+                      {result.calculated_features?.power ?? 0} W
                     </span>
                   </div>
                 </div>

@@ -254,7 +254,7 @@ export const History: React.FC<HistoryProps> = ({
 
                       <td className="py-3 px-4">
                         <span className="text-indigo-600 dark:text-indigo-400 font-bold block">
-                          ΔT {rec.result.calculated_features.temp_diff} K
+                          ΔT {rec.result.calculated_features?.temp_diff ?? 0} K
                         </span>
                         <span className="text-[11px] text-slate-500 dark:text-slate-400">
                           {rec.inputs['Process temperature [K]']} K
@@ -266,7 +266,7 @@ export const History: React.FC<HistoryProps> = ({
                           {rec.inputs['Tool wear [min]']} min
                         </span>
                         <span className="text-[10px] text-slate-400">
-                          {formatPower(rec.result.calculated_features.power)}
+                          {formatPower(rec.result.calculated_features?.power ?? 0)}
                         </span>
                       </td>
 
@@ -386,15 +386,15 @@ export const History: React.FC<HistoryProps> = ({
             <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-[#111a2e] border border-slate-200 dark:border-slate-800 text-xs font-mono space-y-1.5">
               <div className="flex justify-between">
                 <span className="text-slate-400">Temperature Difference (ΔT):</span>
-                <strong className="text-indigo-600 dark:text-indigo-400">{selectedRecord.result.calculated_features.temp_diff} K</strong>
+                <strong className="text-indigo-600 dark:text-indigo-400">{selectedRecord.result.calculated_features?.temp_diff ?? 0} K</strong>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Mechanical Power:</span>
-                <strong className="text-cyan-600 dark:text-cyan-400">{formatPower(selectedRecord.result.calculated_features.power)}</strong>
+                <strong className="text-cyan-600 dark:text-cyan-400">{formatPower(selectedRecord.result.calculated_features?.power ?? 0)}</strong>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Wear-Torque Shear Index:</span>
-                <strong className="text-slate-800 dark:text-slate-200">{selectedRecord.result.calculated_features.wear_torque}</strong>
+                <strong className="text-slate-800 dark:text-slate-200">{selectedRecord.result.calculated_features?.wear_torque ?? 0}</strong>
               </div>
             </div>
 

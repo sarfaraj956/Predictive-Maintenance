@@ -358,13 +358,13 @@ export const Overview: React.FC<OverviewProps> = ({
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Mechanical Power</span>
                     <strong className="text-cyan-600 dark:text-cyan-400">
-                      {formatPower(latestRecord.result.calculated_features.power)}
+                      {formatPower(latestRecord.result.calculated_features?.power ?? 0)}
                     </strong>
                   </div>
                   <div className="flex justify-between text-slate-600 dark:text-slate-400">
                     <span>Wear-Torque Index</span>
                     <strong className="text-slate-900 dark:text-white">
-                      {formatNumber(latestRecord.result.calculated_features.wear_torque)}
+                      {formatNumber(latestRecord.result.calculated_features?.wear_torque ?? 0)}
                     </strong>
                   </div>
                 </div>

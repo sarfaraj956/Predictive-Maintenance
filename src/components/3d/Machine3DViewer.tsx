@@ -211,11 +211,11 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
     scene.add(stateLight);
     alertLightRef.current = stateLight;
 
-    // 5. Grid Floor (Positioned right below machine table at y = -1.45)
+    // 5. Grid Floor (Positioned right below machine table at y = -1.36)
     const gridColor1 = isDark ? 0x00f0ff : 0x0284c7;
     const gridColor2 = isDark ? 0x1e293b : 0xcbd5e1;
     const gridHelper = new THREE.GridHelper(8, 20, gridColor1, gridColor2);
-    gridHelper.position.y = -1.45;
+    gridHelper.position.y = -1.36;
     scene.add(gridHelper);
 
     // 6. Materials
@@ -245,10 +245,10 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
     const machineGroup = new THREE.Group();
     scene.add(machineGroup);
 
-    // Top Head Housing: y from +0.2 to +1.4 (center = +0.8)
-    const housingGeom = new THREE.CylinderGeometry(0.75, 0.75, 1.3, 32);
+    // Top Head Housing: y from +0.26 to +1.46 (center = +0.86, height = 1.2)
+    const housingGeom = new THREE.CylinderGeometry(0.75, 0.75, 1.2, 32);
     const housing = new THREE.Mesh(housingGeom, darkMetalMat);
-    housing.position.y = 0.75;
+    housing.position.y = 0.86;
     machineGroup.add(housing);
 
     // Cyan Neon Accent Rings on Housing
@@ -256,55 +256,55 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
       const finGeom = new THREE.TorusGeometry(0.77, 0.018, 16, 40);
       const fin = new THREE.Mesh(finGeom, glowingCyanMat);
       fin.rotation.x = Math.PI / 2;
-      fin.position.y = 0.35 + i * 0.28;
+      fin.position.y = 0.42 + i * 0.26;
       machineGroup.add(fin);
     }
 
     // Rotating Spindle Rotor Group (center around y = 0.0)
     const rotorGroup = new THREE.Group();
-    rotorGroup.position.y = 0.05;
+    rotorGroup.position.y = 0.0;
     machineGroup.add(rotorGroup);
     spindleRef.current = rotorGroup;
 
-    // Precision Collet Chuck
-    const chuckGeom = new THREE.CylinderGeometry(0.48, 0.32, 0.55, 32);
+    // Precision Collet Chuck (top meets housing base at +0.26, bottom at -0.18)
+    const chuckGeom = new THREE.CylinderGeometry(0.48, 0.32, 0.44, 32);
     const chuck = new THREE.Mesh(chuckGeom, brushedChromeMat);
-    chuck.position.y = -0.05;
+    chuck.position.y = 0.04;
     rotorGroup.add(chuck);
 
-    // End Mill Cutting Tool
-    const toolGeom = new THREE.CylinderGeometry(0.1, 0.1, 0.85, 20);
+    // End Mill Cutting Tool (clamped in chuck at -0.18, tip reaches -0.86)
+    const toolGeom = new THREE.CylinderGeometry(0.095, 0.095, 0.68, 20);
     const tool = new THREE.Mesh(toolGeom, cuttingToolMat);
-    tool.position.y = -0.65;
+    tool.position.y = -0.52;
     rotorGroup.add(tool);
 
     // 4 Spiral Flutes
     for (let i = 0; i < 4; i++) {
-      const fluteGeom = new THREE.BoxGeometry(0.035, 0.55, 0.18);
+      const fluteGeom = new THREE.BoxGeometry(0.035, 0.44, 0.17);
       const flute = new THREE.Mesh(fluteGeom, brushedChromeMat);
-      flute.position.y = -0.68;
+      flute.position.y = -0.54;
       flute.rotation.y = (i * Math.PI) / 2;
       rotorGroup.add(flute);
     }
 
-    // Workpiece Heavy Base: centered at y = -1.35
-    const tableGeom = new THREE.BoxGeometry(2.2, 0.18, 2.2);
+    // Workpiece Heavy Base: centered at y = -1.28 (top at -1.20, bottom at -1.36 resting on grid)
+    const tableGeom = new THREE.BoxGeometry(2.2, 0.16, 2.2);
     const table = new THREE.Mesh(tableGeom, darkMetalMat);
-    table.position.y = -1.35;
+    table.position.y = -1.28;
     machineGroup.add(table);
 
-    // Workpiece Billet Block: sitting on table at y = -1.15
-    const stockGeom = new THREE.BoxGeometry(0.9, 0.3, 0.9);
+    // Workpiece Billet Block: sitting flush on table (bottom at -1.20, top at -0.92)
+    const stockGeom = new THREE.BoxGeometry(0.9, 0.28, 0.9);
     const stockMaterial = new THREE.MeshStandardMaterial({
       color: isDark ? 0x1e293b : 0x64748b,
       metalness: 0.7,
       roughness: 0.4,
     });
     const stock = new THREE.Mesh(stockGeom, stockMaterial);
-    stock.position.y = -1.12;
+    stock.position.y = -1.06;
     machineGroup.add(stock);
 
-    // 8. Machining Spark Particle System
+    // 8. Machining Spark Particle System (Sparks originate at cutting interface y = -0.89)
     const particleCount = 60;
     const particleGeometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -312,7 +312,7 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
 
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 0.1;
-      positions[i * 3 + 1] = -0.95;
+      positions[i * 3 + 1] = -0.89;
       positions[i * 3 + 2] = (Math.random() - 0.5) * 0.1;
 
       velocities[i * 3] = (Math.random() - 0.5) * 0.04;
@@ -432,7 +432,7 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
       camera.position.y = state.radius * Math.cos(state.phi);
       camera.position.z = state.radius * Math.sin(state.phi) * Math.cos(state.theta);
 
-      // ALWAYS LOOK AT THE CENTER (y = -0.1 is optical machine center)
+      // ALWAYS LOOK AT THE CENTER (y = -0.15 is optical machine center)
       camera.lookAt(0, -0.15, 0);
 
       // Spindle rotation proportional to actual RPM
@@ -479,7 +479,7 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
 
             if (posArray[i * 3 + 1] > -0.6 || Math.random() < 0.03) {
               posArray[i * 3] = (Math.random() - 0.5) * 0.12;
-              posArray[i * 3 + 1] = -0.95;
+              posArray[i * 3 + 1] = -0.89;
               posArray[i * 3 + 2] = (Math.random() - 0.5) * 0.12;
             }
           }
@@ -532,102 +532,107 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
       } ${className}`}
     >
       {/* 3D Canvas Mount */}
-      <div ref={mountRef} className="w-full h-80 sm:h-[420px] cursor-grab active:cursor-grabbing" />
+      <div ref={mountRef} className="w-full h-80 sm:h-[430px] cursor-grab active:cursor-grabbing" />
 
-      {/* Top HUD Bar: Clean, Non-overlapping responsive layout */}
-      <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-        {/* Left: Status Pill */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-2.5 w-2.5 relative">
-            <span
-              className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                isFailure ? 'bg-rose-500' : 'bg-cyan-400'
-              }`}
-            />
-            <span
-              className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
-                isFailure ? 'bg-rose-600' : 'bg-cyan-500'
-              }`}
-            />
-          </span>
-          <span className="font-mono text-xs font-bold tracking-wider uppercase text-white bg-slate-950/85 px-3 py-1 rounded-lg border border-slate-700/80 backdrop-blur-md shadow-xs">
-            Digital Twin 3D Spindle {isFailure ? '• FAULT DETECTED' : '• NOMINAL'}
-          </span>
+      {/* Top HUD Controls: Unified flex-column container ensuring ZERO overlap */}
+      <div className="absolute top-3 left-3 right-3 flex flex-col gap-2 pointer-events-none z-10">
+        {/* Row 1: Status Pill and View Modes */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          {/* Status Pill */}
+          <div className="flex items-center gap-2 pointer-events-auto">
+            <span className="flex h-2.5 w-2.5 relative">
+              <span
+                className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                  isFailure ? 'bg-rose-500' : 'bg-cyan-400'
+                }`}
+              />
+              <span
+                className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                  isFailure ? 'bg-rose-600' : 'bg-cyan-500'
+                }`}
+              />
+            </span>
+            <span className="font-mono text-xs font-bold tracking-wider uppercase text-white bg-slate-950/85 px-3 py-1 rounded-lg border border-slate-700/80 backdrop-blur-md shadow-xs">
+              Digital Twin 3D Spindle {isFailure ? '• FAULT DETECTED' : '• NOMINAL'}
+            </span>
+          </div>
+
+          {/* Render Modes Switcher */}
+          <div className="flex items-center gap-1 pointer-events-auto bg-slate-950/85 p-1 rounded-lg border border-slate-700/80 backdrop-blur-md">
+            {(['solid', 'wireframe', 'thermal', 'xray'] as ViewMode[]).map((mode) => (
+              <button
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-semibold transition-all ${
+                  viewMode === mode
+                    ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/60 shadow-[0_0_8px_rgba(0,240,255,0.3)]'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {mode}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Right: Render Modes Switcher */}
-        <div className="flex items-center gap-1 pointer-events-auto bg-slate-950/85 p-1 rounded-lg border border-slate-700/80 backdrop-blur-md">
-          {(['solid', 'wireframe', 'thermal', 'xray'] as ViewMode[]).map((mode) => (
+        {/* Row 2: Camera Presets & Recenter Toolbar (Flows naturally below Row 1, impossible to overlap) */}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-1 pointer-events-auto bg-slate-950/85 p-1 rounded-lg border border-slate-700/80 backdrop-blur-md">
+            <Camera size={13} className="text-cyan-400 ml-1 mr-0.5" />
+            {(['iso', 'tool', 'front', 'top'] as CameraView[]).map((view) => (
+              <button
+                key={view}
+                onClick={() => applyCameraPreset(view)}
+                className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase transition-colors ${
+                  cameraView === view
+                    ? 'bg-slate-700 text-white font-bold'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {view}
+              </button>
+            ))}
+
+            <div className="h-3 w-px bg-slate-700 mx-0.5" />
+
+            {/* Recenter Button */}
             <button
-              key={mode}
-              onClick={() => setViewMode(mode)}
-              className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase font-semibold transition-all ${
-                viewMode === mode
-                  ? 'bg-cyan-500/30 text-cyan-300 border border-cyan-500/60 shadow-[0_0_8px_rgba(0,240,255,0.3)]'
-                  : 'text-slate-400 hover:text-white'
-              }`}
+              onClick={handleRecenter}
+              className="px-2 py-0.5 rounded text-[10px] font-mono font-bold text-cyan-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors flex items-center gap-1"
+              title="Recenter camera to center of machine"
             >
-              {mode}
+              <RotateCcw size={11} />
+              <span>Recenter</span>
             </button>
-          ))}
+
+            <div className="h-3 w-px bg-slate-700 mx-0.5" />
+
+            {/* Pause / Play Rotation */}
+            <button
+              onClick={() => setIsRotating(!isRotating)}
+              className="p-1 rounded text-slate-400 hover:text-white transition-colors"
+              title={isRotating ? 'Pause Spindle Rotation' : 'Resume Spindle Rotation'}
+            >
+              {isRotating ? <Pause size={12} /> : <Play size={12} />}
+            </button>
+
+            {/* Audio Toggle */}
+            <button
+              onClick={() => setSoundEnabled(!soundEnabled)}
+              className={`p-1 rounded text-xs font-mono transition-colors ${
+                soundEnabled ? 'text-cyan-300' : 'text-slate-400 hover:text-white'
+              }`}
+              title={soundEnabled ? 'Mute RPM Sound' : 'Enable Spindle RPM Sound'}
+            >
+              {soundEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
+            </button>
+          </div>
         </div>
-      </div>
-
-      {/* Camera Presets & Recenter Toolbar (Placed below top bar with ample spacing) */}
-      <div className="absolute top-12 left-3 flex items-center gap-1 pointer-events-auto bg-slate-950/85 p-1 rounded-lg border border-slate-700/80 backdrop-blur-md">
-        <Camera size={13} className="text-cyan-400 ml-1 mr-0.5" />
-        {(['iso', 'tool', 'front', 'top'] as CameraView[]).map((view) => (
-          <button
-            key={view}
-            onClick={() => applyCameraPreset(view)}
-            className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase transition-colors ${
-              cameraView === view
-                ? 'bg-slate-700 text-white font-bold'
-                : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            {view}
-          </button>
-        ))}
-
-        <div className="h-3 w-px bg-slate-700 mx-0.5" />
-
-        {/* Recenter Button */}
-        <button
-          onClick={handleRecenter}
-          className="px-2 py-0.5 rounded text-[10px] font-mono font-bold text-cyan-400 hover:text-cyan-300 hover:bg-slate-800 transition-colors flex items-center gap-1"
-          title="Recenter camera to center of machine"
-        >
-          <RotateCcw size={11} />
-          <span>Recenter</span>
-        </button>
-
-        <div className="h-3 w-px bg-slate-700 mx-0.5" />
-
-        {/* Pause / Play Rotation */}
-        <button
-          onClick={() => setIsRotating(!isRotating)}
-          className="p-1 rounded text-slate-400 hover:text-white transition-colors"
-          title={isRotating ? 'Pause Spindle Rotation' : 'Resume Spindle Rotation'}
-        >
-          {isRotating ? <Pause size={12} /> : <Play size={12} />}
-        </button>
-
-        {/* Audio Toggle */}
-        <button
-          onClick={() => setSoundEnabled(!soundEnabled)}
-          className={`p-1 rounded text-xs font-mono transition-colors ${
-            soundEnabled ? 'text-cyan-300' : 'text-slate-400 hover:text-white'
-          }`}
-          title={soundEnabled ? 'Mute RPM Sound' : 'Enable Spindle RPM Sound'}
-        >
-          {soundEnabled ? <Volume2 size={12} /> : <VolumeX size={12} />}
-        </button>
       </div>
 
       {/* Bottom Telemetry HUD */}
-      <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-        <div className="flex items-center gap-3 bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-700/80 text-xs font-mono shadow-lg text-white">
+      <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-end justify-between gap-2 pointer-events-none z-10">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 bg-slate-950/90 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-slate-700/80 text-xs font-mono shadow-lg text-white pointer-events-auto">
           <div className="flex items-center gap-1.5 text-cyan-400">
             <Gauge size={13} />
             <span className="font-bold">{rotationalSpeed}</span>
@@ -659,7 +664,7 @@ export const Machine3DViewer: React.FC<Machine3DViewerProps> = ({
           </div>
         </div>
 
-        <span className="text-[10px] text-slate-400 font-mono bg-slate-950/80 px-2.5 py-1 rounded-lg border border-slate-700/60 backdrop-blur-md">
+        <span className="text-[10px] text-slate-400 font-mono bg-slate-950/80 px-2.5 py-1 rounded-lg border border-slate-700/60 backdrop-blur-md pointer-events-auto">
           Drag to orbit • Wheel to zoom
         </span>
       </div>
